@@ -1,0 +1,62 @@
+plugins {
+    id 'idea'
+    id 'application'
+    id 'org.javamodularity.moduleplugin' version '1.8.12'
+
+    id 'org.openjfx.javafxplugin' version '0.0.14'
+
+    id 'org.beryx.jlink' version '2.26.0'
+}
+
+group = 'org.jabreftest.test'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+application {
+    mainClass.set('org.jabreftest.test.Main')
+    mainModule.set('testjabref')
+}
+test {
+    useJUnitPlatform()
+}
+
+modularity.disableEffectiveArgumentsAdjustment()
+
+java {
+    modularity.inferModulePath.set(false)
+}
+
+jlink {
+    addOptions('--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages')
+    launcher {
+        name = 'JabRef'
+    }
+
+    addOptions("--bind-services")
+
+    jpackage {
+        outputDir = "distribution"
+
+        installerOptions = [
+                '--verbose',
+                '--mac-sign',
+                '--vendor', 'JabRef',
+                '--mac-package-identifier', "testJabRef",
+                '--mac-package-name', "testJabRef",
+                '--app-version', "${project.version}",
+                '--type', "dmg",
+                '--mac-signing-key-user-name', "XXXXX (XXXX)",
+                '--mac-package-signing-prefix', ".",
+                '--mac-entitlements', "jabref.entitlements"
+        ]
+    }
+}
+

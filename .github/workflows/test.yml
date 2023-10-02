@@ -20,7 +20,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
-      - run: ./gradle jpackage --info
+      - run: ./gradlew jpackage --info
       - run: xcrun notarytool store-credentials "notarytool-profile" --apple-id "${{ secrets.APPLE_ID }}" --team-id "12345667" --password "${{ secrets.APPLE_ID_PASSWORD }}"
       - run: xcrun notarytool submit build/distribution/JabRef-1.0.0.dmg --keychain-profile "notarytool-profile" --wait
       - run: xcrun notarytool log --keychain-profile "notarytool-profile"

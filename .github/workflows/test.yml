@@ -1,0 +1,43 @@
+name: Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java: [ '17', '20' ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java }}
+          cache: gradle
+      - name: Setup macOS key chain
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.OSX_SIGNING_CERT }}
+          p12-password: ${{ secrets.OSX_CERT_PWD }}
+          keychain-password: jabref
+      - name: Setup macOS key chain for app id cert
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.OSX_SIGNING_CERT_APPLICATION }}
+          p12-password: ${{ secrets.OSX_CERT_PWD }}
+          create-keychain: false
+          keychain-password: jabref
+      - run: ./gradlew jpackage --info
+      - run: xcrun notarytool store-credentials "notarytool-profile" --apple-id "vorstand@jabref.org" --team-id "6792V39SK3" --password "${{ secrets.OSX_NOTARIZATION_APP_PWD }}"
+      - run: |
+          xcrun notarytool submit build/distribution/JabRef-1.0.0.dmg --keychain-profile "notarytool-profile" --wait | tee output.log
+          ID=$(grep 'id:' output.log | head -n 1 | awk '{print $2}')
+          echo $ID
+          xcrun notarytool log --keychain-profile "notarytool-profile" $ID

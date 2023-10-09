@@ -1,5 +1,5 @@
-# testnotarization
+# Test notarization with jpackage
 
-Test notarization with jpackage
+This project demonstrates <https://github.com/adoptium/adoptium-support/issues/829>.
 
-This is for demonstration for <https://github.com/adoptium/adoptium-support/issues/829>.
+For `jpackage`, [The Badass JLink Plugin](https://badass-jlink-plugin.beryx.org/releases/latest/) is used.

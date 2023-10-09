@@ -20,6 +20,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
+          cache: gradle
       - name: Setup macOS key chain
         uses: apple-actions/import-codesign-certs@v2
         with:
@@ -34,6 +35,6 @@ jobs:
           create-keychain: false
           keychain-password: jabref
       - run: ./gradlew jpackage --info
-      - run: xcrun notarytool store-credentials "notarytool-profile" --apple-id "${{ secrets.APPLE_ID }}" --team-id "12345667" --password "${{ secrets.APPLE_ID_PASSWORD }}"
+      - run: xcrun notarytool store-credentials "notarytool-profile" --apple-id "vorstand@jabref.org" --team-id "6792V39SK3" --password "${{ secrets.OSX_NOTARIZATION_APP_PWD }}"
       - run: xcrun notarytool submit build/distribution/JabRef-1.0.0.dmg --keychain-profile "notarytool-profile" --wait
       - run: xcrun notarytool log --keychain-profile "notarytool-profile"

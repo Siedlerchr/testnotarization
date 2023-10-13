@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ main ]
 
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: macos-latest
@@ -43,4 +47,5 @@ jobs:
           xcrun notarytool log --keychain-profile "notarytool-profile" $ID
       - uses: actions/upload-artifact@v3
         with:
+          name: dmg-java-${{ matrix.java }}
           path: build/distribution/JabRef-1.0.0.dmg

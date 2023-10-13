@@ -41,3 +41,6 @@ jobs:
           ID=$(grep 'id:' output.log | head -n 1 | awk '{print $2}')
           echo $ID
           xcrun notarytool log --keychain-profile "notarytool-profile" $ID
+      - uses: actions/upload-artifact@v3
+        with:
+          path: build/distribution/JabRef-1.0.0.dmg

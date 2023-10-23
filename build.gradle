@@ -53,7 +53,7 @@ jlink {
                 '--mac-package-name', "testJabRef",
                 '--app-version', "${project.version}",
                 '--type', "dmg",
-                '--mac-signing-key-user-name "JabRef e.V. (6792V39SK3)",
+                '--mac-signing-key-user-name', "JabRef e.V. (6792V39SK3)",
                 '--mac-package-signing-prefix', "org.jabref",
                 '--mac-entitlements', "jabref.entitlements"
         ]

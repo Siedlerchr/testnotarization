@@ -48,13 +48,13 @@ jlink {
         installerOptions = [
                 '--verbose',
                 '--mac-sign',
-                '--vendor', 'JabRef',
+                '--vendor', 'JabRef e.V.',
                 '--mac-package-identifier', "testJabRef",
                 '--mac-package-name', "testJabRef",
                 '--app-version', "${project.version}",
                 '--type', "dmg",
-                '--mac-signing-key-user-name', "XXXXX (XXXX)",
-                '--mac-package-signing-prefix', ".",
+                '--mac-signing-key-user-name "JabRef e.V. (6792V39SK3)",
+                '--mac-package-signing-prefix', "org.jabref",
                 '--mac-entitlements', "jabref.entitlements"
         ]
     }
